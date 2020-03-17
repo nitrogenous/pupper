@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View } from 'react-native';
 
-export default function HomeScreen() {
+export default function SwipeScreen() {
   return (
     <View>
 
@@ -9,6 +9,6 @@ export default function HomeScreen() {
   );
 }
 
-HomeScreen.navigationOptions = {
+SwipeScreen.navigationOptions = {
   header: null,
 };
