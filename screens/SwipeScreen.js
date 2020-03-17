@@ -1,14 +1,15 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 export default function SwipeScreen() {
-  return (
-    <View>
 
-    </View>
-  );
+    return (
+        <View>
+            <Text> Like me! </Text>
+        </View>
+);
 }
 
 SwipeScreen.navigationOptions = {
-  header: null,
+    header: 'pupper',
 };

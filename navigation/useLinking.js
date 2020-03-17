@@ -9,7 +9,7 @@ export default function(containerRef) {
         path: 'root',
         screens: {
           Swipe: 'swipe',
-          Links: 'links',
+          Favorites: 'favorites',
         },
       },
     },

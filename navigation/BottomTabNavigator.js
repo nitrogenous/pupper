@@ -2,10 +2,10 @@ import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '../components/TabBarIcon';
 import SwipeScreen from '../screens/SwipeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import Favorites from '../screens/Favorites';
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Home';
+const INITIAL_ROUTE_NAME = 'Swipe';
 
 export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -24,10 +24,10 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
-        name="Links"
-        component={LinksScreen}
+        name="Favorites"
+        component={Favorites}
         options={{
-          title: 'Links',
+          title: 'Favorites',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-star" />,
         }}
       />
@@ -40,8 +40,8 @@ function getHeaderTitle(route) {
 
   switch (routeName) {
     case 'Swipe':
-      return 'How to get started';
-    case 'Links':
-      return 'Links to learn more';
+      return 'pupper';
+    case 'Favorites':
+      return 'Favorites';
   }
 }
