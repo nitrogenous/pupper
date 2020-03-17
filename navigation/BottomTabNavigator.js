@@ -19,16 +19,16 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="Swipe"
         component={SwipeScreen}
         options={{
-          title: 'Swipe',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-heart"/>,
+          title: '',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-paw"/>,
         }}
       />
       <BottomTab.Screen
         name="Favorites"
         component={Favorites}
         options={{
-          title: 'Favorites',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-star" />,
+          title: '',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-heart" />,
         }}
       />
     </BottomTab.Navigator>
