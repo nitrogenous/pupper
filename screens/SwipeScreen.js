@@ -1,29 +1,25 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 import ApolloClient from 'apollo-boost';
 import { gql } from 'apollo-boost';
 import SwipeCard from '../components/SwipeCard';
 
 class SwipeScreen extends React.Component {
-    static navigationOptions = {
-        header: 'pupper',
-    };
 
     constructor(props) {
         super(props);
         this.state = {
-            cardValues: []
+            amountOfCards: 20,
+            cards: []
         };
 
     }
 
     componentWillMount() {
-        this.graphqlRequest();
+        this.getCardDetails(this.state.amountOfCards);
     }
 
-    graphqlRequest() {
-        console.log(this.state.cardValues)
-
+    getCardDetails(amountOfCards) {
         let client = new ApolloClient({
             uri: 'https://www.graphqlhub.com/graphql',
         });
@@ -32,7 +28,7 @@ class SwipeScreen extends React.Component {
             query: gql `{
                 reddit {
                     subreddit(name: "darkmeme"){
-                        hotListings(limit: 19) {
+                        hotListings(limit: ${amountOfCards}) {
                                 fullnameId
                                 title
                                 score
@@ -43,22 +39,22 @@ class SwipeScreen extends React.Component {
             }`
         }).then((result) => {
             this.setState({
-                cardValues: result.data.reddit.subreddit.hotListings || {}
+                cards: result.data.reddit.subreddit.hotListings || {}
             })
         })
     }
 
     render() {
         return (
-            <View>
-                {(this.state.cardValues).map((prop) => {
+            <ScrollView>
+                {(this.state.cards).map((detailsOfCard, indexOfCard) => {
                     return (
-                        <SwipeCard />
+                        <SwipeCard key={indexOfCard} cardDetails={JSON.stringify(detailsOfCard)} />
                     );
                 })}
 
-                <Text> Like me! </Text>
-            </View>
+                <Text>Like me!</Text>
+            </ScrollView>
         );
     }
 }
