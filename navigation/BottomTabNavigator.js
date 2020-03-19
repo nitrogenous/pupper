@@ -11,7 +11,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
-  navigation.setOptions({ headerTitle: getHeaderTitle(route),style: {color: '#2C3D63'} });
+  navigation.setOptions({ headerTitle: getHeaderTitle(route), headerStyle: {backgroundColor: '#2C3D63'}, headerTintColor:'#fff'});
 
   return (
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
@@ -19,7 +19,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="Swipe"
         component={SwipeScreen}
         options={{
-          title: '',
+          title: 'Swipe',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-paw"/>,
         }}
       />
@@ -27,7 +27,8 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="Favorites"
         component={Favorites}
         options={{
-          title: '',
+          
+          title: 'Favorites',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-heart" />,
         }}
       />
