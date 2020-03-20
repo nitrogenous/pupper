@@ -53,11 +53,18 @@ class SwipeScreen extends React.Component {
     }
 
     render() {
+        let { detailsOfCards, indexOfCurrentCard } = this.state;
+
         return (
             <View>
-                {(this.state.detailsOfCards).map((detailsOfCard, indexOfCard) => {
+                {(detailsOfCards).map((detailsOfCard, indexOfThisCard) => {
                     return (
-                        <SwipeCard key={indexOfCard} cardDetails={JSON.stringify(detailsOfCard)} />
+                        <SwipeCard 
+                            key={indexOfThisCard}
+                            indexOfThisCard={indexOfThisCard}
+                            indexOfCurrentCard={indexOfCurrentCard}
+                            cardDetails={JSON.stringify(detailsOfCard)} 
+                        />
                     );
                 }).reverse()}
             </View>
