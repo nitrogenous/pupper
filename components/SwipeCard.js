@@ -37,7 +37,7 @@ class SwipeCard extends Component {
 
             }
         });
-    };
+    }
 
     render() {
         let { fullnameId, title, score, url } = this.cardDetails;
@@ -53,7 +53,21 @@ class SwipeCard extends Component {
                     styles.wrapperOfCard
                 ]}
             >
-                <Text style={{position: 'absolute', bottom: 25, left: 50, color: 'white', zIndex: isCurrentCard ? 1 : 0}}>{title}</Text>
+                
+                <Animated.View style={[ styles.choiceWrapper, { transform: [{ rotate: '-30deg' }], left: 40 } ]} >
+                    <Text style={[ styles.choiceText, { borderColor: 'green', color: 'green' }]} >
+                        LIKE
+                    </Text>
+                </Animated.View>
+
+                 <Animated.View style={[ styles.choiceWrapper, { transform: [{ rotate: '30deg' }], right: 40 } ]} >
+                    <Text style={[ styles.choiceText, { borderColor: 'red', color: 'red' } ]} >
+                        NOPE
+                    </Text>
+                </Animated.View>
+
+                <Text style={{position: 'absolute', bottom: 25, left: 50, color: 'blue', zIndex: isCurrentCard ? 1 : 0}}>{title}</Text>
+
                 <Image 
                     style={styles.imageOfCard} 
                     source={{uri: url}}
@@ -76,7 +90,18 @@ const styles = StyleSheet.create({
         height: null,
         resizeMode: 'cover',
         borderRadius: 20
-    }
+    },
+    choiceWrapper: {
+        position: 'absolute', 
+        top: 50, 
+        zIndex: 2
+    },
+    choiceText: {
+        borderWidth: 1,
+        fontSize: 32,
+        fontWeight: '800',
+        padding: 10
+    },
 });
 
 export default SwipeCard;
