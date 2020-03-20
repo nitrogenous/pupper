@@ -4,7 +4,7 @@ import ApolloClient from 'apollo-boost';
 import { gql } from 'apollo-boost';
 import SwipeCard from '../components/SwipeCard';
 
-const subRedditName = 'darkmeme';
+const subRedditName = 'lwiay';
 const endpointOfAPI = 'https://www.graphqlhub.com/graphql';
 
 class SwipeScreen extends React.Component {
@@ -15,7 +15,7 @@ class SwipeScreen extends React.Component {
             amountOfCards: 20,
             detailsOfCards: [],
             lastViewedCardId: '',
-            indexOfCurrentCard: 0,
+            indexOfCurrentCard: 19,
         };
 
     }
@@ -32,7 +32,7 @@ class SwipeScreen extends React.Component {
         });
         let results = await this.runApolloQuery(client, amountOfCards, lastViewedCardId)
 
-        this.setState({detailsOfCards: results.data.reddit.subreddit.hotListings})
+        this.setState({ detailsOfCards: results.data.reddit.subreddit.hotListings })
     }
 
     async runApolloQuery(client, amountOfCards, lastViewedCardId) {
@@ -66,7 +66,7 @@ class SwipeScreen extends React.Component {
                             cardDetails={JSON.stringify(detailsOfCard)} 
                         />
                     );
-                }).reverse()}
+                })}
             </View>
         );
     }

@@ -31,7 +31,7 @@ class SwipeCard extends Component {
         let { fullnameId, title, score, url } = this.cardDetails;
         let { indexOfThisCard, indexOfCurrentCard } = this.props;
         let isCurrentCard = indexOfThisCard === indexOfCurrentCard;
-        
+
         return (
             <Animated.View
                 { ...(isCurrentCard && this.PanResponder.panHandlers) }
@@ -50,9 +50,9 @@ class SwipeCard extends Component {
     }
 }
 
-const styles =  StyleSheet.create({
+const styles = StyleSheet.create({
     wrapperOfCard: {
-        height: SCREEN_HEIGHT - 140,
+        height: SCREEN_HEIGHT - 120,
         width: SCREEN_WIDTH,
         padding: 20,
         position: 'absolute'
