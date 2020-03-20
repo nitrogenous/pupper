@@ -4,18 +4,19 @@ import ApolloClient from 'apollo-boost';
 import { gql } from 'apollo-boost';
 import SwipeCard from '../components/SwipeCard';
 
-const subRedditName = 'lwiay';
+const subRedditName = 'darkmeme';
 const endpointOfAPI = 'https://www.graphqlhub.com/graphql';
 
 class SwipeScreen extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
             amountOfCards: 20,
             detailsOfCards: [],
             lastViewedCardId: '',
-            indexOfCurrentCard: 19,
+            indexOfCurrentCard: 0,
         };
 
     }
@@ -66,7 +67,7 @@ class SwipeScreen extends React.Component {
                             cardDetails={JSON.stringify(detailsOfCard)} 
                         />
                     );
-                })}
+                }).reverse()}
             </View>
         );
     }
