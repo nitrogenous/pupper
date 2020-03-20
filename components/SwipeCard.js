@@ -47,12 +47,13 @@ class SwipeCard extends Component {
         return (
             <Animated.View
                 { ...(isCurrentCard && this.PanResponder.panHandlers) }
+
                 style={[
                     (isCurrentCard && this.rotateAndTranslateTheCard), 
                     styles.wrapperOfCard
                 ]}
             >
-                <Text>{title}</Text>
+                <Text style={{position: 'absolute', bottom: 25, left: 50, color: 'white', zIndex: isCurrentCard ? 1 : 0}}>{title}</Text>
                 <Image 
                     style={styles.imageOfCard} 
                     source={{uri: url}}
