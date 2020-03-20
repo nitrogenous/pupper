@@ -19,7 +19,7 @@ class SwipeScreen extends React.Component {
 
     }
 
-    componentDidMount() {
+    UNSAFE_componentWillMount() {
         let { amountOfCards, lastViewedCardId } = this.state;
 
         this.updateValuesOfCards(amountOfCards, lastViewedCardId);
