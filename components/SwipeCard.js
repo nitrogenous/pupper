@@ -29,10 +29,16 @@ class SwipeCard extends Component {
 
     render() {
         let { fullnameId, title, score, url } = this.cardDetails;
+        let { indexOfThisCard, indexOfCurrentCard } = this.props;
+        let isCurrentCard = indexOfThisCard === indexOfCurrentCard;
+        
         return (
             <Animated.View
-                {...this.PanResponder.panHandlers}
-                style={[{transform: this.position.getTranslateTransform() }, styles.wrapperOfCard]}
+                { ...(isCurrentCard && this.PanResponder.panHandlers) }
+                style={[
+                    isCurrentCard && {transform: this.position.getTranslateTransform()} , 
+                    styles.wrapperOfCard
+                ]}
             >
                 <Text>{title}</Text>
                 <Image 
