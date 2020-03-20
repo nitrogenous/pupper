@@ -13,8 +13,9 @@ class SwipeScreen extends React.Component {
         super(props);
         this.state = {
             amountOfCards: 20,
+            detailsOfCards: [],
             lastViewedCardId: '',
-            valuesOfCards: []
+            indexOfCurrentCard: 0,
         };
 
     }
@@ -22,16 +23,16 @@ class SwipeScreen extends React.Component {
     UNSAFE_componentWillMount() {
         let { amountOfCards, lastViewedCardId } = this.state;
 
-        this.updateValuesOfCards(amountOfCards, lastViewedCardId);
+        this.updatedetailsOfCards(amountOfCards, lastViewedCardId);
     }
 
-    async updateValuesOfCards(amountOfCards, lastViewedCardId) {
+    async updatedetailsOfCards(amountOfCards, lastViewedCardId) {
         let client = new ApolloClient({
             uri: endpointOfAPI
         });
         let results = await this.runApolloQuery(client, amountOfCards, lastViewedCardId)
 
-        this.setState({valuesOfCards: results.data.reddit.subreddit.hotListings})
+        this.setState({detailsOfCards: results.data.reddit.subreddit.hotListings})
     }
 
     async runApolloQuery(client, amountOfCards, lastViewedCardId) {
@@ -54,9 +55,9 @@ class SwipeScreen extends React.Component {
     render() {
         return (
             <View>
-                {(this.state.valuesOfCards).map((valuesOfCard, indexOfCard) => {
+                {(this.state.detailsOfCards).map((detailsOfCard, indexOfCard) => {
                     return (
-                        <SwipeCard key={indexOfCard} cardDetails={JSON.stringify(valuesOfCard)} />
+                        <SwipeCard key={indexOfCard} cardDetails={JSON.stringify(detailsOfCard)} />
                     );
                 }).reverse()}
             </View>
