@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, Dimensions, Animated, PanResponder } from 'react-native';
+import { StyleSheet, View, Text, Image, Dimensions, Animated, PanResponder } from 'react-native';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -11,7 +11,11 @@ class SwipeCard extends Component {
         this.position = new Animated.ValueXY();
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
+        this.listenCardMovements();
+    }
+
+    listenCardMovements() {
         this.PanResponder = PanResponder.create({
             onStartShouldSetPanResponder: (event, gestureState) => true,
             onPanResponderMove: (event, gestureState) => {
@@ -21,16 +25,39 @@ class SwipeCard extends Component {
 
             }
         });
-    }
+    };
 
     render() {
+        let { fullnameId, title, score, url } = this.cardDetails;
         return (
-            <Animated.View {...this.PanResponder.panHandlers} style={[{transform: this.position.getTranslateTransform() },{ height: SCREEN_HEIGHT-120, width: SCREEN_WIDTH, padding: 10, position: 'absolute' }]} >
-                <Text>{this.cardDetails.title}</Text>
-                <Image style={{ flex: 1, width: null, height: null, resizeMode: 'cover', borderRadius: 20 }} source={{uri: this.cardDetails.url}}/>
+            <Animated.View
+                {...this.PanResponder.panHandlers}
+                style={[{transform: this.position.getTranslateTransform() }, styles.wrapperOfCard]}
+            >
+                <Text>{title}</Text>
+                <Image 
+                    style={styles.imageOfCard} 
+                    source={{uri: url}}
+                />
             </Animated.View>
         );
     }
 }
+
+const styles =  StyleSheet.create({
+    wrapperOfCard: {
+        height: SCREEN_HEIGHT - 140,
+        width: SCREEN_WIDTH,
+        padding: 20,
+        position: 'absolute'
+    },
+    imageOfCard: {
+        flex: 1,
+        width: null,
+        height: null,
+        resizeMode: 'cover',
+        borderRadius: 20
+    }
+});
 
 export default SwipeCard;
