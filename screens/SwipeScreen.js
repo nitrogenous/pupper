@@ -1,8 +1,11 @@
 import React from 'react';
-import { ScrollView, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import ApolloClient from 'apollo-boost';
 import { gql } from 'apollo-boost';
 import SwipeCard from '../components/SwipeCard';
+
+const subRedditName = 'darkmeme';
+const endpointOfAPI = 'https://www.graphqlhub.com/graphql';
 
 class SwipeScreen extends React.Component {
 
@@ -10,24 +13,32 @@ class SwipeScreen extends React.Component {
         super(props);
         this.state = {
             amountOfCards: 20,
-            cards: []
+            lastViewedCardId: '',
+            valuesOfCards: []
         };
 
     }
 
-    componentWillMount() {
-        this.getCardDetails(this.state.amountOfCards);
+    componentDidMount() {
+        let { amountOfCards, lastViewedCardId } = this.state;
+
+        this.updateValuesOfCards(amountOfCards, lastViewedCardId);
     }
 
-    getCardDetails(amountOfCards) {
+    async updateValuesOfCards(amountOfCards, lastViewedCardId) {
         let client = new ApolloClient({
-            uri: 'https://www.graphqlhub.com/graphql',
+            uri: endpointOfAPI
         });
+        let results = await this.runApolloQuery(client, amountOfCards, lastViewedCardId)
 
-        client.query({
+        this.setState({valuesOfCards: results.data.reddit.subreddit.hotListings})
+    }
+
+    async runApolloQuery(client, amountOfCards, lastViewedCardId) {
+        return await client.query({
             query: gql `{
                 reddit {
-                    subreddit(name: "darkmeme"){
+                    subreddit(name: "${subRedditName}"){
                         hotListings(limit: ${amountOfCards}) {
                                 fullnameId
                                 title
@@ -37,24 +48,18 @@ class SwipeScreen extends React.Component {
                         }
                 }
             }`
-        }).then((result) => {
-            this.setState({
-                cards: result.data.reddit.subreddit.hotListings || {}
-            })
-        })
+        });
     }
 
     render() {
         return (
-            <ScrollView>
-                {(this.state.cards).map((detailsOfCard, indexOfCard) => {
+            <View>
+                {(this.state.valuesOfCards).map((valuesOfCard, indexOfCard) => {
                     return (
-                        <SwipeCard key={indexOfCard} cardDetails={JSON.stringify(detailsOfCard)} />
+                        <SwipeCard key={indexOfCard} cardDetails={JSON.stringify(valuesOfCard)} />
                     );
-                })}
-
-                <Text>Like me!</Text>
-            </ScrollView>
+                }).reverse()}
+            </View>
         );
     }
 }
