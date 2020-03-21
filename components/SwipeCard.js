@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, Dimensions, Animated, PanResponder } from 'react-native';
 
 const SCREEN = Dimensions.get('window');
-const SCREEN_SCREEN_WIDTH_2 = SCREEN.width / 2
+const SCREEN_WIDTH_2 = SCREEN.width / 2
 
 class SwipeCard extends Component {
     constructor(props) {
@@ -23,7 +23,16 @@ class SwipeCard extends Component {
                 this.cardPosition.setValue({ x: gestureState.dx, y: gestureState.dy })
             },
             onPanResponderRelease: (event, gestureState) => {
-
+                if(gestureState.dx > 120) {
+                    Animated.spring(this.cardPosition, {
+                        toValue: { X: SCREEN.width + 1, y: gestureState.dy }
+                    }).start(() => { 
+                        this.props.likeEvent();
+                        () => {
+                            this.position.setValue( { x: 0, y: 0 } )
+                        };
+                    })
+                }
             }
         });
     }
@@ -32,13 +41,12 @@ class SwipeCard extends Component {
         let { fullnameId, title, score, url } = this.cardDetails;
         let { indexOfThisCard, indexOfCurrentCard } = this.props;
         let isCurrentCard = indexOfThisCard === indexOfCurrentCard;
-
         return (
             <Animated.View
-                { ...(isCurrentCard && this.PanResponder.panHandlers) }
+                { ...( isCurrentCard && this.PanResponder.panHandlers ) }
 
                 style={[
-                    (isCurrentCard && this.rotateAndTranslateTheCard()), 
+                    ( isCurrentCard && this.swipeAnimationOfCard() ), 
                     styles.wrapperOfCard
                 ]}
             >
@@ -73,16 +81,7 @@ class SwipeCard extends Component {
         );
     }
 
-    opacityOfChoice(choice) {
-        let outputRangeValue = choice === 'LIKE' ? [0, 0, 1] : [1, 0, 0];
-        return this.cardPosition.x.interpolate({
-            inputRange: [-SCREEN_WIDTH_2, 0, SCREEN_WIDTH_2],
-            outputRange: outputRangeValue,
-            extropolate: 'clamp'
-        })
-    }
-
-    rotateAndTranslateTheCard() {
+    swipeAnimationOfCard() {
         return {
             transform: [{
                     rotate: this.cardPosition.x.interpolate({
@@ -94,6 +93,15 @@ class SwipeCard extends Component {
                 ...this.cardPosition.getTranslateTransform()
             ]
         }
+    }
+
+    opacityOfChoice(choice) {
+        let outputRangeValue = choice === 'LIKE' ? [0, 0, 1] : [1, 0, 0];
+        return this.cardPosition.x.interpolate({
+            inputRange: [-SCREEN_WIDTH_2, 0, SCREEN_WIDTH_2],
+            outputRange: outputRangeValue,
+            extropolate: 'clamp'
+        })
     }
 }
 
