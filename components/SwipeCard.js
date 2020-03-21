@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, Dimensions, Animated, PanResponder } from 'react-native';
 
 const SCREEN = Dimensions.get('window');
-const WIDTH_2 = SCREEN.width / 2
+const SCREEN_SCREEN_WIDTH_2 = SCREEN.width / 2
 
 class SwipeCard extends Component {
     constructor(props) {
@@ -76,7 +76,7 @@ class SwipeCard extends Component {
     opacityOfChoice(choice) {
         let outputRangeValue = choice === 'LIKE' ? [0, 0, 1] : [1, 0, 0];
         return this.cardPosition.x.interpolate({
-            inputRange: [-WIDTH_2, 0, WIDTH_2],
+            inputRange: [-SCREEN_WIDTH_2, 0, SCREEN_WIDTH_2],
             outputRange: outputRangeValue,
             extropolate: 'clamp'
         })
@@ -86,7 +86,7 @@ class SwipeCard extends Component {
         return {
             transform: [{
                     rotate: this.cardPosition.x.interpolate({
-                        inputRange: [-WIDTH_2, 0, WIDTH_2],
+                        inputRange: [-SCREEN_WIDTH_2, 0, SCREEN_WIDTH_2],
                         outputRange: ['-10deg', '0deg', '10deg'],
                         extropolate: 'clamp'
                     })
