@@ -42,13 +42,22 @@ class SwipeCard extends Component {
                     styles.wrapperOfCard
                 ]}
             >
-                <Animated.View style={[ styles.choiceWrapper, { transform: [{ rotate: '-30deg' }], left: 40, opacity: this.opacityOfChoice('LIKE') } ]} >
+                <Animated.View 
+                    style={[ 
+                        styles.choiceWrapper, 
+                        { transform: [{ rotate: '-30deg' }], left: 40, opacity: this.opacityOfChoice('LIKE') } 
+                    ]} 
+                >
                     <Text style={[ styles.choiceText, { borderColor: 'green', color: 'green' }]} >
                         LIKE
                     </Text>
                 </Animated.View>
 
-                 <Animated.View style={[ styles.choiceWrapper, { transform: [{ rotate: '30deg' }], right: 40, opacity: this.opacityOfChoice('NOPE') } ]} >
+                 <Animated.View style={[ 
+                        styles.choiceWrapper, 
+                        { transform: [{ rotate: '30deg' }], right: 40, opacity: this.opacityOfChoice('NOPE') } 
+                    ]} 
+                >
                     <Text style={[ styles.choiceText, { borderColor: 'red', color: 'red' } ]} >
                         NOPE
                     </Text>
