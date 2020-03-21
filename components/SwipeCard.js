@@ -1,30 +1,19 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, Dimensions, Animated, PanResponder } from 'react-native';
 
-const SCREEN_HEIGHT = Dimensions.get('window').height;
-const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN = Dimensions.get('window');
+const WIDTH_2 = SCREEN.width / 2
 
 class SwipeCard extends Component {
     constructor(props) {
         super(props);
-
         this.cardDetails = JSON.parse(this.props.cardDetails);
         this.cardPosition = new Animated.ValueXY();
-        this.rotateAndTranslateTheCard = {
-            transform: [{
-                    rotate: this.cardPosition.x.interpolate({
-                        inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-                        outputRange: ['-10deg', '0deg', '10deg'],
-                        extropolate: 'clamp'
-                    })
-                },
-                ...this.cardPosition.getTranslateTransform()
-            ]
-        }
     }
 
     UNSAFE_componentWillMount() {
         this.listenCardMovements();
+
     }
 
     listenCardMovements() {
@@ -49,18 +38,17 @@ class SwipeCard extends Component {
                 { ...(isCurrentCard && this.PanResponder.panHandlers) }
 
                 style={[
-                    (isCurrentCard && this.rotateAndTranslateTheCard), 
+                    (isCurrentCard && this.rotateAndTranslateTheCard()), 
                     styles.wrapperOfCard
                 ]}
             >
-                
-                <Animated.View style={[ styles.choiceWrapper, { transform: [{ rotate: '-30deg' }], left: 40 } ]} >
+                <Animated.View style={[ styles.choiceWrapper, { transform: [{ rotate: '-30deg' }], left: 40, opacity: this.opacityOfChoice('LIKE') } ]} >
                     <Text style={[ styles.choiceText, { borderColor: 'green', color: 'green' }]} >
                         LIKE
                     </Text>
                 </Animated.View>
 
-                 <Animated.View style={[ styles.choiceWrapper, { transform: [{ rotate: '30deg' }], right: 40 } ]} >
+                 <Animated.View style={[ styles.choiceWrapper, { transform: [{ rotate: '30deg' }], right: 40, opacity: this.opacityOfChoice('NOPE') } ]} >
                     <Text style={[ styles.choiceText, { borderColor: 'red', color: 'red' } ]} >
                         NOPE
                     </Text>
@@ -75,12 +63,35 @@ class SwipeCard extends Component {
             </Animated.View>
         );
     }
+
+    opacityOfChoice(choice) {
+        let outputRangeValue = choice === 'LIKE' ? [0, 0, 1] : [1, 0, 0];
+        return this.cardPosition.x.interpolate({
+            inputRange: [-WIDTH_2, 0, WIDTH_2],
+            outputRange: outputRangeValue,
+            extropolate: 'clamp'
+        })
+    }
+
+    rotateAndTranslateTheCard() {
+        return {
+            transform: [{
+                    rotate: this.cardPosition.x.interpolate({
+                        inputRange: [-WIDTH_2, 0, WIDTH_2],
+                        outputRange: ['-10deg', '0deg', '10deg'],
+                        extropolate: 'clamp'
+                    })
+                },
+                ...this.cardPosition.getTranslateTransform()
+            ]
+        }
+    }
 }
 
 const styles = StyleSheet.create({
     wrapperOfCard: {
-        height: SCREEN_HEIGHT - 120,
-        width: SCREEN_WIDTH,
+        height: SCREEN.height - 120,
+        width: SCREEN.width,
         padding: 20,
         position: 'absolute'
     },
@@ -92,8 +103,8 @@ const styles = StyleSheet.create({
         borderRadius: 20
     },
     choiceWrapper: {
-        position: 'absolute', 
-        top: 50, 
+        position: 'absolute',
+        top: 50,
         zIndex: 2
     },
     choiceText: {
