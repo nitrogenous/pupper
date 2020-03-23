@@ -22,13 +22,21 @@ class SwipeScreen extends React.Component {
     }
 
     UNSAFE_componentWillMount() {
-        if(this.state.detailsOfCards.length < 1) {
+        this.updateDetailsOfCards();
+    }
+
+    async updateDetailsOfCards(lastViewedCardId = '') {
+        this.setState({ lastViewedCardId: lastViewedCardId });
+
+        if (this.state.detailsOfCards.length < 3) {
             let { amountOfCards, lastViewedCardId } = this.state;
-            this.updatedetailsOfCards(amountOfCards, lastViewedCardId);
+            let cardDetails = await this.getCardsFromAPI(amountOfCards, lastViewedCardId);
+
+            this.setState({ detailsOfCards: cardDetails })
         }
     }
 
-    async updatedetailsOfCards(amountOfCards, lastViewedCardId) {
+    async getCardsFromAPI(amountOfCards, lastViewedCardId) {
         let client = new ApolloClient({
             uri: endpointOfAPI
         });
@@ -37,17 +45,7 @@ class SwipeScreen extends React.Component {
 
         cardDetails = this.checkCardUrlsAreValid(cardDetails);
 
-        this.setState({ detailsOfCards: cardDetails })
-    }
-
-    checkCardUrlsAreValid(cards) {
-        return cards.filter(card => 
-            this.isUrlContainImage(card.url)
-        )  
-    }
-
-    isUrlContainImage(url) {
-        return !!url.match(/\.(jpeg|jpg|gif|png|gfycat|imgur)$/);
+        return cardDetails || [];
     }
 
     async runApolloQuery(client, amountOfCards, lastViewedCardId) {
@@ -67,6 +65,17 @@ class SwipeScreen extends React.Component {
         });
     }
 
+    checkCardUrlsAreValid(cards) {
+        return cards.filter((card) => {
+            return this.isUrlContainImage(card.url)
+        });
+    }
+
+    isUrlContainImage(url) {
+        return !!url.match(/\.(jpeg|jpg|gif|png|gfycat|imgur)$/);
+    }
+
+
     render() {
         let { detailsOfCards } = this.state;
 
@@ -78,8 +87,8 @@ class SwipeScreen extends React.Component {
                             key= { indexOfThisCard }
                             indexOfThisCard = { indexOfThisCard }
                             cardDetails = { JSON.stringify(detailsOfCard) }
-                            likeEvent = { () => {this.likeEvent()} }
-                            dislikeEvent = { () => this.dislikeEvent() }
+                            likeEvent = { this.likeEvent.bind(this) }
+                            dislikeEvent = { this.dislikeEvent.bind(this) }
                         />
                     );
                 }).reverse()}
@@ -87,13 +96,15 @@ class SwipeScreen extends React.Component {
         );
     }
 
-    likeEvent() {
-        console.log('LIKE')
-        this.updateCurrentCard()
+    likeEvent(detailsOfCard) {
+        console.log(detailsOfCard)
+
+        this.updateCurrentCard();
     }
 
-    dislikeEvent() {
-        console.log('DISLIKE')
+    dislikeEvent(detailsOfCard) {
+        console.log(detailsOfCard)
+        
         this.updateCurrentCard();
     }
 
