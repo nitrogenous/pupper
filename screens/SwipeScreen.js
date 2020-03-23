@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, AsyncStorage } from 'react-native';
 import ApolloClient from 'apollo-boost';
 import { gql } from 'apollo-boost';
 import SwipeCard from '../components/SwipeCard';
@@ -87,8 +87,7 @@ class SwipeScreen extends React.Component {
                             key= { indexOfThisCard }
                             indexOfCard = { indexOfThisCard }
                             cardDetails = { JSON.stringify(detailsOfCard) }
-                            likeEvent = { this.likeEvent.bind(this) }
-                            dislikeEvent = { this.dislikeEvent.bind(this) }
+                            cardSwiped = { this.cardSwiped.bind(this) }
                         />
                     );
                 }).reverse()}
@@ -96,17 +95,14 @@ class SwipeScreen extends React.Component {
         );
     }
 
-    likeEvent(indexOfSwipedCard) {
-        console.log(this.state.detailsOfCards[indexOfSwipedCard])
+    cardSwiped(indexOfSwipedCard, swipeEvent) {
+        if(swipeEvent === 'LIKE') {
+
+        }
 
         this.updateCurrentCard();
     }
 
-    dislikeEvent(indexOfSwipedCard) {
-        console.log(this.state.detailsOfCards[indexOfSwipedCard])
-
-        this.updateCurrentCard();
-    }
 
     updateCurrentCard() {
         let newCardDetails = this.state.detailsOfCards;

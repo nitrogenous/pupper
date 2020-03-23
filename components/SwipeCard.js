@@ -26,14 +26,14 @@ class SwipeCard extends Component {
                     Animated.spring(this.cardPosition, {
                         toValue: { X: SCREEN.width + 200, y: gestureState.dy }
                     }).start(() => {
-                        this.props.likeEvent(this.props.indexOfCard);
+                        this.props.cardSwiped(this.props.indexOfCard, 'LIKE');
                     })
                 }
                 else if (gestureState.dx < -120) {
                     Animated.spring(this.cardPosition, {
                         toValue: { X: SCREEN.width + 200, y: gestureState.dy }
                     }).start(() => {
-                        this.props.dislikeEvent(this.props.indexOfCard);
+                        this.props.cardSwiped(this.props.indexOfCard, 'NOPE');
                     })
                 }
                 else {
