@@ -15,7 +15,7 @@ class SwipeScreen extends React.Component {
         this.state = {
             amountOfCards: 5,
             detailsOfCards: [],
-            lastViewedCardId: 't3_fnebhw',
+            lastViewedCardId: '',
         };
 
 
@@ -32,10 +32,22 @@ class SwipeScreen extends React.Component {
         let client = new ApolloClient({
             uri: endpointOfAPI
         });
-        let results = await this.runApolloQuery(client, amountOfCards, lastViewedCardId)
+        let queryResults = await this.runApolloQuery(client, amountOfCards, lastViewedCardId)
+        let cardDetails = queryResults.data.reddit.subreddit.hotListings
 
+        cardDetails = this.checkCardUrlsAreValid(cardDetails);
 
-        this.setState({ detailsOfCards: results.data.reddit.subreddit.hotListings })
+        this.setState({ detailsOfCards: cardDetails })
+    }
+
+    checkCardUrlsAreValid(cards) {
+        return cards.filter(card => 
+            this.isUrlContainImage(card.url)
+        )  
+    }
+
+    isUrlContainImage(url) {
+        return !!url.match(/\.(jpeg|jpg|gif|png|gfycat|imgur)$/);
     }
 
     async runApolloQuery(client, amountOfCards, lastViewedCardId) {
