@@ -115,17 +115,13 @@ class SwipeScreen extends React.Component {
             let value = await AsyncStorage.getItem(storageSelector);
 
             return value || '';
-        } 
-        catch (error) {
-        }
+        } catch (error) {}
     }
 
     async setDataToStorage(storageSelector, valueOfStorage) {
         try {
             await AsyncStorage.setItem(storageSelector, valueOfStorage);
-        } 
-        catch (error) {
-        }
+        } catch (error) {}
     }
 
     updateCurrentCard() {
