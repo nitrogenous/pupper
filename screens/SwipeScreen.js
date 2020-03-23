@@ -85,7 +85,7 @@ class SwipeScreen extends React.Component {
                     return (
                         <SwipeCard 
                             key= { indexOfThisCard }
-                            indexOfThisCard = { indexOfThisCard }
+                            indexOfCard = { indexOfThisCard }
                             cardDetails = { JSON.stringify(detailsOfCard) }
                             likeEvent = { this.likeEvent.bind(this) }
                             dislikeEvent = { this.dislikeEvent.bind(this) }
@@ -96,15 +96,15 @@ class SwipeScreen extends React.Component {
         );
     }
 
-    likeEvent(detailsOfCard) {
-        console.log(detailsOfCard)
+    likeEvent(indexOfSwipedCard) {
+        console.log(this.state.detailsOfCards[indexOfSwipedCard])
 
         this.updateCurrentCard();
     }
 
-    dislikeEvent(detailsOfCard) {
-        console.log(detailsOfCard)
-        
+    dislikeEvent(indexOfSwipedCard) {
+        console.log(this.state.detailsOfCards[indexOfSwipedCard])
+
         this.updateCurrentCard();
     }
 

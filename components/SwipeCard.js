@@ -13,7 +13,6 @@ class SwipeCard extends Component {
 
     UNSAFE_componentWillMount() {
         this.listenCardMovements();
-
     }
 
     listenCardMovements() {
@@ -27,14 +26,14 @@ class SwipeCard extends Component {
                     Animated.spring(this.cardPosition, {
                         toValue: { X: SCREEN.width + 200, y: gestureState.dy }
                     }).start(() => {
-                        this.props.likeEvent();
+                        this.props.likeEvent(this.props.indexOfCard);
                     })
                 }
                 else if (gestureState.dx < -120) {
                     Animated.spring(this.cardPosition, {
                         toValue: { X: SCREEN.width + 200, y: gestureState.dy }
                     }).start(() => {
-                        this.props.dislikeEvent();
+                        this.props.dislikeEvent(this.props.indexOfCard);
                     })
                 }
                 else {
@@ -49,8 +48,8 @@ class SwipeCard extends Component {
 
     render() {
         let { fullnameId, title, score, url } = this.cardDetails;
-        let { indexOfThisCard } = this.props;
-        let isCurrentCard = indexOfThisCard === 0;
+        let { indexOfCard } = this.props;
+        let isCurrentCard = indexOfCard === 0;
 
         return (
             <Animated.View
@@ -81,12 +80,12 @@ class SwipeCard extends Component {
                         NOPE
                     </Text>
                 </Animated.View>
-                <View style= {{position: 'absolute', zIndex: -indexOfThisCard, bottom: 19, left: 20, borderBottomRightRadius: 20, borderBottomLeftRadius: 20, width: SCREEN.width - 40, padding: 20, backgroundColor: 'rgba(0, 0, 0, 0.5)'}} >
+                <View style= {{position: 'absolute', zIndex: -indexOfCard, bottom: 19, left: 20, borderBottomRightRadius: 20, borderBottomLeftRadius: 20, width: SCREEN.width - 40, padding: 20, backgroundColor: 'rgba(0, 0, 0, 0.5)'}} >
                     <Text style = {{ color: 'white' }}>{ title }</Text>
                 </View>
 
                 <Image 
-                    style={[ styles.imageOfCard, {zIndex: -(indexOfThisCard + 1)} ]} 
+                    style={[ styles.imageOfCard, {zIndex: -(indexOfCard + 1)} ]} 
                     source={{uri: url}}
                 />
             </Animated.View>
@@ -109,6 +108,7 @@ class SwipeCard extends Component {
 
     opacityOfChoice(choice) {
         let outputRangeValue = choice === 'LIKE' ? [0, 0, 1] : [1, 0, 0];
+
         return this.cardPosition.x.interpolate({
             inputRange: [-SCREEN_WIDTH_2, 0, SCREEN_WIDTH_2],
             outputRange: outputRangeValue,
