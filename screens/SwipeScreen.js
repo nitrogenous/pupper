@@ -107,6 +107,7 @@ class SwipeScreen extends React.Component {
         let cardDetails = this.state.detailsOfCards[indexOfSwipedCard];
 
         favoritedCards.unshift(cardDetails);
+
         this.setDataToStorage(storageSelector, JSON.stringify(favoritedCards));
     }
 
