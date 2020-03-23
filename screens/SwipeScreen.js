@@ -17,15 +17,15 @@ class SwipeScreen extends React.Component {
             detailsOfCards: [],
             lastViewedCardId: 't3_fn5ry6',
         };
-        console.log(this.state.detailsOfCards.length )
+
+
+    }
+
+    UNSAFE_componentWillMount() {
         if(this.state.detailsOfCards.length < 1) {
             let { amountOfCards, lastViewedCardId } = this.state;
             this.updatedetailsOfCards(amountOfCards, lastViewedCardId);
         }
-    }
-
-    UNSAFE_componentWillMount() {
-        console.log
     }
 
     async updatedetailsOfCards(amountOfCards, lastViewedCardId) {
@@ -34,7 +34,6 @@ class SwipeScreen extends React.Component {
         });
         let results = await this.runApolloQuery(client, amountOfCards, lastViewedCardId)
 
-        console.log(typeof results)
 
         this.setState({ detailsOfCards: results.data.reddit.subreddit.hotListings })
     }
@@ -58,12 +57,10 @@ class SwipeScreen extends React.Component {
 
     render() {
         let { detailsOfCards } = this.state;
-        console.log('render')
-        console.log(detailsOfCards);
+
         return (
             <View>
                 {detailsOfCards.map((detailsOfCard, indexOfThisCard) => {
-                    console.log(indexOfThisCard)
                     return (
                         <SwipeCard 
                             key={indexOfThisCard}
@@ -73,22 +70,22 @@ class SwipeScreen extends React.Component {
                         />
                     );
                 }).reverse()}
-            {console.log(detailsOfCards)}
             </View>
         );
     }
 
     likeEvent() {
+        this.updateCurrentCard()
+    }
+
+    dislikeEvent() {
+        this.updateCurrentCard();
+    }
+
+    updateCurrentCard() {
         let newCardDetails = this.state.detailsOfCards;
 
-        console.log('BEFORE ' );
-        console.log( newCardDetails)
-
         newCardDetails.shift();
-
-        console.log('AFTER ')
-        console.log(newCardDetails)
-
 
         this.setState({ detailsOfCards: newCardDetails });
     }
