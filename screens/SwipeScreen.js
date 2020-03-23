@@ -13,27 +13,19 @@ class SwipeScreen extends React.Component {
         super(props);
 
         this.state = {
-            amountOfCards: 20,
+            amountOfCards: 5,
             detailsOfCards: [],
-            lastViewedCardId: '',
-            indexOfCurrentCard: 0,
+            lastViewedCardId: 't3_fn5ry6',
         };
-
-    }
-
-    UNSAFE_componentWillMount() {
-        let { amountOfCards, lastViewedCardId } = this.state;
-        
-        console.log(this.state.detailsOfCards.length)
-
-        if(this.state.detailsOfCards.length < 5) {
+        console.log(this.state.detailsOfCards.length )
+        if(this.state.detailsOfCards.length < 1) {
+            let { amountOfCards, lastViewedCardId } = this.state;
             this.updatedetailsOfCards(amountOfCards, lastViewedCardId);
         }
     }
 
-    shouldComponentUpdate() {
-       console.log(this.state.detailsOfCards.length)
-       true;
+    UNSAFE_componentWillMount() {
+        console.log
     }
 
     async updatedetailsOfCards(amountOfCards, lastViewedCardId) {
@@ -41,6 +33,8 @@ class SwipeScreen extends React.Component {
             uri: endpointOfAPI
         });
         let results = await this.runApolloQuery(client, amountOfCards, lastViewedCardId)
+
+        console.log(typeof results)
 
         this.setState({ detailsOfCards: results.data.reddit.subreddit.hotListings })
     }
@@ -50,7 +44,7 @@ class SwipeScreen extends React.Component {
             query: gql `{
                 reddit {
                     subreddit(name: "${subRedditName}"){
-                        hotListings(limit: ${amountOfCards}) {
+                        hotListings(limit: ${amountOfCards}, after: "${lastViewedCardId}") {
                                 fullnameId
                                 title
                                 score
@@ -63,21 +57,23 @@ class SwipeScreen extends React.Component {
     }
 
     render() {
-        let { detailsOfCards, indexOfCurrentCard } = this.state;
-
+        let { detailsOfCards } = this.state;
+        console.log('render')
+        console.log(detailsOfCards);
         return (
             <View>
-                {(detailsOfCards).map((detailsOfCard, indexOfThisCard) => {
+                {detailsOfCards.map((detailsOfCard, indexOfThisCard) => {
+                    console.log(indexOfThisCard)
                     return (
                         <SwipeCard 
                             key={indexOfThisCard}
                             indexOfThisCard={indexOfThisCard}
-                            indexOfCurrentCard={indexOfCurrentCard}
                             cardDetails={JSON.stringify(detailsOfCard)}
                             likeEvent={() => {this.likeEvent()}}
                         />
                     );
                 }).reverse()}
+            {console.log(detailsOfCards)}
             </View>
         );
     }
@@ -85,13 +81,16 @@ class SwipeScreen extends React.Component {
     likeEvent() {
         let newCardDetails = this.state.detailsOfCards;
 
-        console.log(newCardDetails)
+        console.log('BEFORE ' );
+        console.log( newCardDetails)
 
         newCardDetails.shift();
 
+        console.log('AFTER ')
         console.log(newCardDetails)
 
-        this.setState({indexOfCurrentCard: this.state.indexOfCurrentCard + 1, detailsOfCards: newCardDetails});
+
+        this.setState({ detailsOfCards: newCardDetails });
     }
 }
 

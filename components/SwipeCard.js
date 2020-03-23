@@ -39,8 +39,11 @@ class SwipeCard extends Component {
 
     render() {
         let { fullnameId, title, score, url } = this.cardDetails;
-        let { indexOfThisCard, indexOfCurrentCard } = this.props;
-        let isCurrentCard = indexOfThisCard === indexOfCurrentCard;
+        let { indexOfThisCard } = this.props;
+        let isCurrentCard = indexOfThisCard === 0;
+
+        console.log(isCurrentCard + '1')
+
         return (
             <Animated.View
                 { ...( isCurrentCard && this.PanResponder.panHandlers ) }
