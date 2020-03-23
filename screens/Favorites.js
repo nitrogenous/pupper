@@ -1,7 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, FlatList, AsyncStorage } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import * as WebBrowser from 'expo-web-browser';
+import { StyleSheet, Text, View, ScrollView, FlatList, AsyncStorage, TouchableOpacity } from 'react-native';
 
 class Favorites extends React.Component {
     constructor(props) {
@@ -9,49 +7,65 @@ class Favorites extends React.Component {
         this.state = {
             favoritedCards: []
         };
-
     }
 
     UNSAFE_componentWillMount() {
         this.getFavoritedCards();
-
     };
 
     async getFavoritedCards() {
         let storageSelector = 'favoriteCards';
         let favoritedCards = JSON.parse(await this.getDataFromStorage(storageSelector) || '[]');
-        console.log(favoritedCards);
+
         this.setState({ favoritedCards: favoritedCards });
     }
 
     async getDataFromStorage(storageSelector) {
         try {
             let value = await AsyncStorage.getItem(storageSelector);
-            console.log(value)
+
             return value || '';
         } catch (error) {}
     }
 
+
+    render() {
+        let { favoritedCards } = this.state;
+
+        return (
+            <ScrollView >
+                {favoritedCards.map((detailsOfItem, indexOfItem) => {
+                    return (
+                        <View key={indexOfItem}  style={{flexDirection:'row', flexWrap:'wrap'}}>
+                            <Text >
+                                {detailsOfItem.title}
+                            </Text>
+                            <TouchableOpacity onPress={() => {this.removeItemFromFavorites(indexOfItem)}}>
+                                <Text>
+                                    X
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    );
+                })}
+            </ScrollView>
+        );
+    }
+
+    removeItemFromFavorites(indexOfItem) {
+        let { favoritedCards } = this.state;
+        let storageSelector = 'favoriteCards';
+
+        favoritedCards.splice(indexOfItem, 1);
+
+        this.setState({ favoritedCards: favoritedCards });
+        this.setDataToStorage(storageSelector, JSON.stringify(favoritedCards));
+    }
+  
     async setDataToStorage(storageSelector, valueOfStorage) {
         try {
             await AsyncStorage.setItem(storageSelector, valueOfStorage);
         } catch (error) {}
-    }
-
-    render() {
-        return (
-            <View style={{ 
-             flex: 1,
-             alignItems:'center',
-             justifyContent:'center'
-            }}>
-            <FlatList
-                data={this.state.favoritedCards}
-                renderItem={({item}) => <Text>{item.title}</Text>}
-            />
-
-            </View>
-        );
     }
 }
 
