@@ -27,9 +27,8 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="Favorites"
         component={Favorites}
         options={{
-          
           title: 'Favorites',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-heart" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-heart"/>,
         }}
       />
     </BottomTab.Navigator>
