@@ -13,12 +13,10 @@ class SwipeScreen extends React.Component {
         super(props);
 
         this.state = {
-            amountOfCards: 5,
+            amountOfCards: 10,
             detailsOfCards: [],
             lastViewedCardId: '',
         };
-
-
     }
 
     UNSAFE_componentWillMount() {
@@ -72,7 +70,7 @@ class SwipeScreen extends React.Component {
     }
 
     isUrlContainImage(url) {
-        return !!url.match(/\.(jpeg|jpg|gif|png|gfycat|imgur)$/);
+        return !!url.match(/\.(jpeg|jpg|png)$/);
     }
 
 
@@ -96,13 +94,39 @@ class SwipeScreen extends React.Component {
     }
 
     cardSwiped(indexOfSwipedCard, swipeEvent) {
-        if(swipeEvent === 'LIKE') {
-
+        if (swipeEvent === 'LIKE') {
+            this.addCardToFavorites(indexOfSwipedCard);
         }
 
         this.updateCurrentCard();
     }
 
+    async addCardToFavorites(indexOfSwipedCard) {
+        let storageSelector = 'favoriteCards'
+        let favoritedCards = JSON.parse(await this.getDataFromStorage(storageSelector) || '[]');
+        let cardDetails = this.state.detailsOfCards[indexOfSwipedCard];
+
+        favoritedCards.unshift(cardDetails);
+        this.setDataToStorage(storageSelector, JSON.stringify(favoritedCards));
+    }
+
+    async getDataFromStorage(storageSelector) {
+        try {
+            let value = await AsyncStorage.getItem(storageSelector);
+
+            return value || '';
+        } 
+        catch (error) {
+        }
+    }
+
+    async setDataToStorage(storageSelector, valueOfStorage) {
+        try {
+            await AsyncStorage.setItem(storageSelector, valueOfStorage);
+        } 
+        catch (error) {
+        }
+    }
 
     updateCurrentCard() {
         let newCardDetails = this.state.detailsOfCards;
