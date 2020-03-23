@@ -4,7 +4,7 @@ import ApolloClient from 'apollo-boost';
 import { gql } from 'apollo-boost';
 import SwipeCard from '../components/SwipeCard';
 
-const subRedditName = 'darkmeme';
+const subRedditName = 'aww';
 const endpointOfAPI = 'https://www.graphqlhub.com/graphql';
 
 class SwipeScreen extends React.Component {
@@ -15,7 +15,7 @@ class SwipeScreen extends React.Component {
         this.state = {
             amountOfCards: 5,
             detailsOfCards: [],
-            lastViewedCardId: 't3_fn5ry6',
+            lastViewedCardId: 't3_fnebhw',
         };
 
 
@@ -63,10 +63,11 @@ class SwipeScreen extends React.Component {
                 {detailsOfCards.map((detailsOfCard, indexOfThisCard) => {
                     return (
                         <SwipeCard 
-                            key={indexOfThisCard}
-                            indexOfThisCard={indexOfThisCard}
-                            cardDetails={JSON.stringify(detailsOfCard)}
-                            likeEvent={() => {this.likeEvent()}}
+                            key= { indexOfThisCard }
+                            indexOfThisCard = { indexOfThisCard }
+                            cardDetails = { JSON.stringify(detailsOfCard) }
+                            likeEvent = { () => {this.likeEvent()} }
+                            dislikeEvent = { () => this.dislikeEvent() }
                         />
                     );
                 }).reverse()}
@@ -75,10 +76,12 @@ class SwipeScreen extends React.Component {
     }
 
     likeEvent() {
+        console.log('LIKE')
         this.updateCurrentCard()
     }
 
     dislikeEvent() {
+        console.log('DISLIKE')
         this.updateCurrentCard();
     }
 
