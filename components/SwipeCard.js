@@ -23,15 +23,25 @@ class SwipeCard extends Component {
                 this.cardPosition.setValue({ x: gestureState.dx, y: gestureState.dy })
             },
             onPanResponderRelease: (event, gestureState) => {
-                if(gestureState.dx > 120) {
+                if (gestureState.dx > 120) {
                     Animated.spring(this.cardPosition, {
-                        toValue: { X: SCREEN.width + 1, y: gestureState.dy }
-                    }).start(() => { 
+                        toValue: { X: SCREEN.width + 200, y: gestureState.dy }
+                    }).start(() => {
                         this.props.likeEvent();
-                        () => {
-                            this.position.setValue( { x: 0, y: 0 } )
-                        };
                     })
+                }
+                else if (gestureState.dx < -120) {
+                    Animated.spring(this.cardPosition, {
+                        toValue: { X: SCREEN.width + 200, y: gestureState.dy }
+                    }).start(() => {
+                        this.props.dislikeEvent();
+                    })
+                }
+                else {
+                    Animated.spring(this.cardPosition, {
+                        toValue: { x: 0, y: 0 },
+                        friction: 4
+                    }).start()
                 }
             }
         });
@@ -41,8 +51,6 @@ class SwipeCard extends Component {
         let { fullnameId, title, score, url } = this.cardDetails;
         let { indexOfThisCard } = this.props;
         let isCurrentCard = indexOfThisCard === 0;
-
-        console.log(isCurrentCard + '1')
 
         return (
             <Animated.View
@@ -64,7 +72,7 @@ class SwipeCard extends Component {
                     </Text>
                 </Animated.View>
 
-                 <Animated.View style={[ 
+                <Animated.View style={[ 
                         styles.choiceWrapper, 
                         { transform: [{ rotate: '30deg' }], right: 40, opacity: this.opacityOfChoice('NOPE') } 
                     ]} 
@@ -73,11 +81,12 @@ class SwipeCard extends Component {
                         NOPE
                     </Text>
                 </Animated.View>
-
-                <Text style={{position: 'absolute', bottom: 25, left: 50, color: 'blue', zIndex: isCurrentCard ? 1 : 0}}>{title}</Text>
+                <View style= {{position: 'absolute', zIndex: -indexOfThisCard, bottom: 19, left: 20, borderBottomRightRadius: 20, borderBottomLeftRadius: 20, width: SCREEN.width - 40, padding: 20, backgroundColor: 'rgba(0, 0, 0, 0.5)'}} >
+                    <Text style = {{ color: 'white' }}>{ title }</Text>
+                </View>
 
                 <Image 
-                    style={styles.imageOfCard} 
+                    style={[ styles.imageOfCard, {zIndex: -(indexOfThisCard + 1)} ]} 
                     source={{uri: url}}
                 />
             </Animated.View>
